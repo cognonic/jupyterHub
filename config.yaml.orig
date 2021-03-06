@@ -1,0 +1,61 @@
+proxy:
+  secretToken: "<secretToken>"
+    
+singleuser:
+  extraEnv:
+    EDITOR: "nano"
+    ENV: "development"
+
+  # remove if you want to use JupyterNotebook instead
+  defaultUrl: "/lab"
+
+  image:
+    name: gcr.io/<imageRepoDirectory>/jupyter-basic
+    tag: latest
+
+  profileList:
+    - display_name: "Basic Environment"
+      description: "To avoid too much bells and whistles: Python."
+      default: true
+
+    - display_name: "Datascience Environment"
+      description: "Jupyter SciPy Stack + R-Program Stack: Python, R, and Julia."
+      kubespawner_override:
+        image: gcr.io/<imageRepoDirectory>/jupyter-datascience
+        tag: latest
+
+    - display_name: "PySpark Environment"
+      description: "Jupyter SciPy Stack + PySpark Environment"
+      kubespawner_override:
+        image: gcr.io/<imageRepoDirectory>/jupyter-pyspark
+        tag: latest
+
+    - display_name: "PyTorch Environment"
+      description: "Datascience Stack + PyTorch + FastAI Environment"
+      kubespawner_override:
+        image: gcr.io/<imageRepoDirectory>/jupyter-pytorch:latest
+
+    - display_name: "R-Program Environment"
+      description: "Jupyter Minimal Stack + R-Program Environment"
+      kubespawner_override:
+        image: gcr.io/<imageRepoDirectory>/jupyter-r:latest
+
+    - display_name: "TensorFlow Environment"
+      description: "Jupyter SciPy Stack + TensorFlow Environment"
+      kubespawner_override:
+        image: gcr.io/<imageRepoDirectory>/jupyter-tensorflow:latest
+
+    - display_name: "Test Environment"
+      description: "Testing a Jupyter Docker image build"
+      kubespawner_override:
+        image: gcr.io/<imageRepoDirectory>/jupyter-test:latest
+
+hub:
+  extraConfig: 
+    test_hub_users: |
+      c.Authenticator.admin_users = {'adminuser1', 'adminuser2'}
+      c.Authenticator.allowed_users = {'user1', 'user2'}
+      c.DummyAuthenticator.password = 'groupPassword'
+    test_hub_dir: |
+      c.Spawner.notebook_dir = '/notebooks'
+
